@@ -6,16 +6,22 @@
 <!-- Keine fremden Server: Die Auslosung läuft komplett im Browser. -->
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; form-action 'none'; base-uri 'none'">
 <meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#0b1a2e">
 <title>Wichteln</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8E%81%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="wichteln.css">
 </head>
 <body>
+<div class="snow" id="snow" aria-hidden="true"></div>
+<div class="lights" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
 
 <!-- Organisator: auslosen -->
 <main id="setup" hidden>
-  <h1>Wichteln 🎁</h1>
-  <p class="muted">Namen eintragen, auslosen und jedem seinen Link schicken. Nur wer den Link öffnet, sieht, wen er beschenkt.</p>
+  <header class="hero">
+    <p class="kicker">✦ Wichtelautomat ✦</p>
+    <h1>Wichteln</h1>
+    <p class="sub">Namen eintragen, auslosen und jedem seinen Link schicken. Nur wer den Link öffnet, sieht, wen er beschenkt.</p>
+  </header>
 
   <form id="form" class="card" autocomplete="off">
     <label>Teilnehmer <small>(ein Name pro Zeile, mindestens 3)</small>
@@ -33,12 +39,12 @@
       <textarea id="excl" rows="2" placeholder="Anna - Ben"></textarea>
     </label>
     <p id="error" class="error" role="alert" hidden></p>
-    <button type="submit">Auslosen</button>
+    <button type="submit">🎄 Auslosen</button>
   </form>
 
   <section id="result" hidden>
-    <h2>Links</h2>
-    <p class="muted">Du siehst die Zuordnung nicht und kannst selbst mitmachen. Schick jedem genau seinen Link.</p>
+    <h2>Eure Wichtel-Links</h2>
+    <p class="sub">Du siehst die Zuordnung nicht und kannst selbst mitmachen. Schick jedem genau seinen Link.</p>
     <ul id="links" class="links"></ul>
     <button id="copyAll" type="button" class="secondary">Alle Links kopieren</button>
   </section>
@@ -46,14 +52,19 @@
 
 <!-- Teilnehmer: Ergebnis ansehen -->
 <main id="reveal" hidden>
-  <div class="card center">
+  <div class="center">
+    <p class="kicker">✦ Wichteln ✦</p>
     <h1>Hallo <span id="giver"></span>!</h1>
     <div id="hiddenPart">
-      <p class="muted">Achte darauf, dass niemand mitschaut.</p>
-      <button id="show" type="button">Anzeigen, wen ich beschenke</button>
+      <p class="sub">In diesem Päckchen steckt, wen du beschenkst. Achte darauf, dass niemand mitschaut.</p>
     </div>
-    <div id="shownPart" hidden>
-      <p class="muted">Du beschenkst</p>
+    <button id="gift" class="gift" type="button" aria-label="Päckchen öffnen">
+      <span class="lid"><span class="bow"></span></span>
+      <span class="box"></span>
+    </button>
+    <button id="show" type="button">Päckchen öffnen</button>
+    <div id="shownPart" class="card tag" hidden>
+      <p class="kicker dark">Du beschenkst</p>
       <p id="receiver" class="receiver"></p>
       <p id="details" class="muted"></p>
     </div>

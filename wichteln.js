@@ -147,16 +147,41 @@ function initSetup() {
 function initReveal(p) {
   $('reveal').hidden = false;
   $('giver').textContent = p.g;
-  $('show').addEventListener('click', () => {
+  let opened = false;
+  const open = () => {
+    if (opened) return;
+    opened = true;
+    $('gift').classList.add('open');
+    $('show').hidden = true;
     $('hiddenPart').hidden = true;
-    $('shownPart').hidden = false;
     $('receiver').textContent = p.r;
     const date = formatDate(p.d);
     $('details').textContent = [p.b && `Budget: ${p.b}`, date && `Bescherung: ${date}`].filter(Boolean).join(' · ');
-  });
+    setTimeout(() => { $('shownPart').hidden = false; }, 450);
+  };
+  $('show').addEventListener('click', open);
+  $('gift').addEventListener('click', open);
+}
+
+// ---------- Schneefall (nur Deko) ----------
+function snow() {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const box = $('snow');
+  for (let i = 0; i < 40; i++) {
+    const f = document.createElement('span');
+    f.textContent = Math.random() < 0.3 ? '❄' : '•';
+    f.style.left = Math.random() * 100 + '%';
+    f.style.fontSize = (6 + Math.random() * 12) + 'px';
+    f.style.opacity = (0.35 + Math.random() * 0.6).toFixed(2);
+    f.style.animationDuration = (8 + Math.random() * 12) + 's';
+    f.style.animationDelay = -(Math.random() * 20) + 's';
+    f.style.setProperty('--drift', (Math.random() * 80 - 40) + 'px');
+    box.append(f);
+  }
 }
 
 (function main() {
+  snow();
   const code = location.hash.slice(1);
   if (!code) { initSetup(); return; }
   let p;
