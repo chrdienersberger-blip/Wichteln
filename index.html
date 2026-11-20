@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- Keine fremden Server: Auslosung und Rap laufen komplett im Browser. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; form-action 'none'; base-uri 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#14080c">
+<title>Wichtel-Rap</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8E%81%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="wichteln.css">
+</head>
+<body>
+
+<!-- Ansicht 1: Organisator lost aus -->
+<main id="setup" hidden>
+  <header class="hero">
+    <p class="kicker">Wichtelautomat</p>
+    <h1>Wichtel-Rap 🎤🎁</h1>
+    <p class="lead">Namen eintragen, auslosen, jedem seinen geheimen Link schicken. Wer den Link öffnet, bekommt per Rap-Story verraten, wen er beschenkt.</p>
+  </header>
+
+  <form id="form" class="card" autocomplete="off">
+    <label>Name der Runde
+      <input id="title" placeholder="z. B. Familien-Wichteln 2026" maxlength="60">
+    </label>
+    <label>Teilnehmer <small>(ein Name pro Zeile, mindestens 3)</small>
+      <textarea id="names" rows="7" placeholder="Anna&#10;Ben&#10;Clara&#10;David"></textarea>
+    </label>
+    <div class="row">
+      <label>Budget
+        <input id="budget" placeholder="z. B. 25 €" maxlength="20">
+      </label>
+      <label>Bescherung am
+        <input id="date" type="date">
+      </label>
+    </div>
+    <label>Wer soll sich nicht gegenseitig ziehen? <small>(optional, ein Paar pro Zeile, z. B. „Anna - Ben“)</small>
+      <textarea id="excl" rows="3" placeholder="Anna - Ben"></textarea>
+    </label>
+    <p id="error" class="error" role="alert" hidden></p>
+    <button type="submit" class="big">Auslosen 🎲</button>
+  </form>
+
+  <section id="result" hidden>
+    <h2>Geheime Links</h2>
+    <p class="note">Die Zuordnung siehst du nicht – du kannst also selbst mitmachen. Schick jedem genau seinen Link.</p>
+    <ul id="links" class="links"></ul>
+    <div class="actions">
+      <button id="copyAll" type="button" class="secondary">Alle Links als Text kopieren</button>
+      <button id="redraw" type="button" class="ghost">Neu auslosen</button>
+    </div>
+  </section>
+
+  <footer class="foot">Läuft komplett im Browser, gehostet über GitHub Pages. Die Zuordnung steckt verschlüsselt im Link selbst – nirgends wird etwas gespeichert oder verschickt.</footer>
+</main>
+
+<!-- Ansicht 2: Teilnehmer öffnet seinen Link -->
+<main id="reveal" hidden>
+  <div id="stage" class="stage">
+    <div id="intro" class="intro">
+      <p class="kicker" id="roundTitle">Wichteln</p>
+      <h1>Yo <span id="giverName"></span>!</h1>
+      <p class="lead">Die Elfen-Crew hat einen Track für dich aufgenommen. Darin steckt, wen du dieses Jahr beschenkst.</p>
+      <p class="hint">🔊 Ton an – es gibt einen Beat.</p>
+      <button id="play" type="button" class="big">Beat starten 🎤</button>
+      <button id="silent" type="button" class="ghost">Ohne Ton lesen</button>
+    </div>
+    <div id="lyrics" class="lyrics" aria-live="polite" hidden></div>
+    <div id="finale" class="finale" hidden>
+      <p class="kicker">Du beschenkst</p>
+      <p id="receiverName" class="receiver"></p>
+      <p id="details" class="details"></p>
+      <button id="again" type="button" class="secondary">Track nochmal abspielen</button>
+    </div>
+  </div>
+  <div class="controls" id="controls" hidden>
+    <button id="mute" type="button" class="ghost small">🔇 Ton aus</button>
+    <button id="skip" type="button" class="ghost small">Überspringen ⏭</button>
+  </div>
+  <canvas id="confetti" aria-hidden="true"></canvas>
+</main>
+
+<main id="broken" hidden>
+  <div class="card center">
+    <h1>Hm, der Link ist kaputt 🤔</h1>
+    <p>Wahrscheinlich wurde er beim Kopieren abgeschnitten. Frag den Organisator nach deinem Link.</p>
+    <a href="./" class="button">Selbst eine Runde auslosen</a>
+  </div>
+</main>
+
+<script src="wichteln.js"></script>
+</body>
+</html>
